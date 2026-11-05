@@ -11,7 +11,7 @@
 
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-  var small = window.matchMedia("(max-width: 860px)").matches;
+  var small = window.matchMedia("(max-width: 600px)").matches;
   var hasGsap = typeof window.gsap !== "undefined" && typeof window.ScrollTrigger !== "undefined";
 
   if (reduced || !hasGsap) doc.classList.add("reduced");
@@ -183,8 +183,14 @@
     scrubVideo(heroVideo, ".hero", "top top", "bottom bottom");
     scrubVideo(pillarsVideo, ".pillars", "top bottom", "bottom top");
   } else {
-    // Phones: the hero orbit loops in its framed panel; the pillars clip loops behind the services
-    [heroVideo, pillarsVideo].forEach(function (v) {
+    // Phones: show the hero orbit's front-facing first frame as a still (saves data, never shows his back)
+    if (heroVideo) {
+      var still = document.querySelector(".hero__media img");
+      if (still && heroVideo.poster) still.src = heroVideo.poster;
+      heroVideo.remove();
+      heroVideo = null;
+    }
+    [pillarsVideo].forEach(function (v) {
       if (!v) return;
       v.setAttribute("autoplay", ""); v.setAttribute("loop", "");
       v.play && v.play().catch(function () {});
