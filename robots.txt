@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://fianitogjeferson-spec.github.io/sitemap.xml
